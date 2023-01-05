@@ -2,18 +2,22 @@ import styled from "styled-components";
 
 const Login = () => {
     const handleClick = () => {
-        const clientId = "835dfdeb70d64caeb62f327f365b9ace";
+        const clientId = "3b16db8f668349b091c8730f47d81851";
         const redirectUrl = "http://localhost:3000/";
         const apiUrl = "https://accounts.spotify.com/authorize";
         const scope = [
-            "user-read-private",
             "user-read-email",
+            "user-read-private",
             "user-modify-playback-state",
             "user-read-playback-state",
             "user-read-currently-playing",
             "user-read-recently-played",
             "user-read-playback-position",
             "user-top-read",
+            "playlist-read-private",
+            "playlist-read-collaborative",
+            "playlist-modify-private",
+            "playlist-modify-public"
         ];
         window.location.href = `${apiUrl}?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=${scope.join(
             " "
