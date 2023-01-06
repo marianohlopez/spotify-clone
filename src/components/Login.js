@@ -17,7 +17,7 @@ const Login = () => {
             "playlist-read-private",
             "playlist-read-collaborative",
             "playlist-modify-private",
-            "playlist-modify-public"
+            "playlist-modify-public",
         ];
         window.location.href = `${apiUrl}?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=${scope.join(
             " "

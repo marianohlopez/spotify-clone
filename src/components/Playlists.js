@@ -53,7 +53,7 @@ const Container = styled.div`
             &-thumb {
               background-color: rgba(255, 255, 255, 0.6);
             }
-          }
+        }
         li {
             display: flex;
             gap: 1rem;

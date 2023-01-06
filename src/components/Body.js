@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { reducerCases } from "../utils/Constants";
 
-const Body = () => {
+const Body = ({ headerBackground }) => {
     const [{ token, selectedPlaylistId, selectedPlaylist }, dispatch] = useStateProvider();
     useEffect(() => {
         const getInitialPlaylist = async () => {
@@ -39,8 +39,12 @@ const Body = () => {
         }
         getInitialPlaylist()
     }, [token, dispatch, selectedPlaylistId])
-
-    return <Container>{selectedPlaylist && (
+    const msToMinutesAndSeconds = (ms) => {
+        var minutes = Math.floor(ms / 60000);
+        var seconds = ((ms % 60000) / 1000).toFixed(0);
+        return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+    };
+    return <Container headerBackground={headerBackground}>{selectedPlaylist && (
         <>
             <div className="playlist">
                 <div className="image">
@@ -103,7 +107,7 @@ const Body = () => {
                                         <span>{album}</span>
                                     </div>
                                     <div className="col">
-                                        <span>{duration}</span>
+                                        <span>{msToMinutesAndSeconds(duration)}</span>
                                     </div>
                                 </div>
                             );
@@ -148,6 +152,8 @@ const Container = styled.div`
       top: 15vh;
       padding: 1rem 3rem;
       transition: 0.3s ease-in-out;
+      background-color: ${({ headerBackground }) =>
+        headerBackground ? "#000000dc" : "none"}
     }
     .tracks {
       margin: 0 2rem;
