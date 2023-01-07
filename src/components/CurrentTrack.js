@@ -1,33 +1,73 @@
 import styled from "styled-components";
 import { useStateProvider } from "../utils/stateProvider";
+import { useEffect } from "react";
+import axios from "axios";
+import { reducerCases } from "../utils/Constants";
 
 const CurrentTrack = () => {
-    const [{ token }, dispatch] = useStateProvider()
+    const [{ token, currentlyPlaying }, dispatch] = useStateProvider()
     useEffect(() => {
-        const getPlaylistData = async () => {
+        const getCurrentTrack = async () => {
             const response = await axios.get(
-                "https://api.spotify.com/v1/me/playlists",
+                "https://api.spotify.com/v1/me/player/currently-playing",
                 {
                     headers: {
                         Accept: "application/json",
                         Authorization: "Bearer " + token,
-                        "Content-Type": "application/json",
                     },
                 }
             )
-            const { items } = response.data;
-            const playlists = items.map(({ name, id }) => {
-                return { name, id }
-            })
-            dispatch({ type: reducerCases.SET_PLAYLISTS, playlists })
+            if (response.data !== "") {
+                const { item } = response.data;
+                const currentlyPlaying = {
+                    id: item.id,
+                    name: item.name,
+                    artists: item.artists.map((artist) => artist.name),
+                    image: item.album.images[2].url,
+                };
+                console.log(currentlyPlaying);
+
+                dispatch({ type: reducerCases.SET_PLAYING, currentlyPlaying });
+            }
         };
-        getPlaylistData();
+        getCurrentTrack();
     }, [token, dispatch])
-    return <Container>Footer</Container>
+    return (
+        <Container>
+            {currentlyPlaying && (
+                <div className="track">
+                    <div className="track__image">
+                        <img src={currentlyPlaying.image} alt="currentlyPlaying" />
+                    </div>
+                    <div className="track__info">
+                        <h4 className="track__info__track__name">{currentlyPlaying.name}</h4>
+                        <h6 className="track__info__track__artists">
+                            {currentlyPlaying.artists.join(", ")}
+                        </h6>
+                    </div>
+                </div>
+            )}
+        </Container>
+    );
 }
 
 const Container = styled.div`
-
-    `;
+  .track {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    &__info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      h4 {
+        color: white;
+      }
+      h6 {
+        color: #b3b3b3;
+      }
+    }
+  }
+`;
 
 export default CurrentTrack;

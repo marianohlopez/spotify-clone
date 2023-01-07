@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import CurrentTrack from "./CurrentTrack";
+import CurrentTrack from "./CurrentTrack.js";
 
 const Footer = () => {
     return <Container><CurrentTrack /></Container>
